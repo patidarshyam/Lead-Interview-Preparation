@@ -1,0 +1,174 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 980" width="100%" height="auto" preserveAspectRatio="xMidYMid meet" font-family="Segoe UI, Arial, sans-serif">
+
+  <!-- Background -->
+  <rect width="1200" height="980" fill="#0f1117"/>
+
+  <!-- Title -->
+  <rect x="20" y="10" width="1160" height="50" rx="8" fill="#20232a"/>
+  <text x="600" y="42" text-anchor="middle" font-size="22" font-weight="bold" fill="#FF9900">☁ AWS Services — Interview Cheatsheet</text>
+
+  <!-- ── COLUMN 1 ── -->
+
+  <!-- Compute -->
+  <rect x="20" y="72" width="370" height="200" rx="8" fill="#1a1d23" stroke="#FF9900" stroke-width="1.5"/>
+  <rect x="20" y="72" width="370" height="32" rx="8" fill="#FF9900"/>
+  <text x="205" y="93" text-anchor="middle" font-size="13" font-weight="bold" fill="#0f1117">COMPUTE</text>
+  <text x="35" y="120" font-size="11" fill="#e6e6e6">EC2          — Virtual servers, full OS control, many types</text>
+  <text x="35" y="138" font-size="11" fill="#e6e6e6">Lambda       — Serverless functions, event-driven, no server mgmt</text>
+  <text x="35" y="156" font-size="11" fill="#e6e6e6">ECS Fargate  — Serverless containers, no EC2 management</text>
+  <text x="35" y="174" font-size="11" fill="#e6e6e6">ECS EC2      — Containers on managed EC2 fleet</text>
+  <text x="35" y="192" font-size="11" fill="#e6e6e6">EKS          — Managed Kubernetes cluster</text>
+  <text x="35" y="216" font-size="11" fill="#fbbf24">Fargate → bursty/short-lived tasks · EC2 → steady/GPU workloads</text>
+  <text x="35" y="234" font-size="11" fill="#fbbf24">Lambda limit: 15 min max, 10GB RAM, 512MB /tmp storage</text>
+  <text x="35" y="252" font-size="11" fill="#f87171">Fargate Spot → 70% cheaper for fault-tolerant batch jobs</text>
+
+  <!-- Storage -->
+  <rect x="20" y="284" width="370" height="195" rx="8" fill="#1a1d23" stroke="#34d399" stroke-width="1.5"/>
+  <rect x="20" y="284" width="370" height="32" rx="8" fill="#34d399"/>
+  <text x="205" y="305" text-anchor="middle" font-size="13" font-weight="bold" fill="#0f1117">STORAGE</text>
+  <text x="35" y="332" font-size="11" fill="#e6e6e6">S3       — Object store: files, backups, static sites, exports</text>
+  <text x="35" y="350" font-size="11" fill="#e6e6e6">S3 IA    — Infrequent access, cheaper, min 30-day charge</text>
+  <text x="35" y="368" font-size="11" fill="#e6e6e6">Glacier  — Archival, minutes–hours retrieval, very cheap</text>
+  <text x="35" y="386" font-size="11" fill="#e6e6e6">EBS      — Block storage attached to EC2 (like a hard drive)</text>
+  <text x="35" y="404" font-size="11" fill="#e6e6e6">EFS      — Managed NFS, shared across multiple EC2 instances</text>
+  <text x="35" y="428" font-size="11" fill="#fbbf24">S3 durability: 99.999999999% (11 nines)</text>
+  <text x="35" y="446" font-size="11" fill="#fbbf24">Lifecycle policy: S3 → IA after 30d → Glacier after 90d</text>
+  <text x="35" y="464" font-size="11" fill="#f87171">EBS only attached to one EC2; EFS shared across many</text>
+
+  <!-- Security -->
+  <rect x="20" y="491" width="370" height="195" rx="8" fill="#1a1d23" stroke="#f87171" stroke-width="1.5"/>
+  <rect x="20" y="491" width="370" height="32" rx="8" fill="#f87171"/>
+  <text x="205" y="512" text-anchor="middle" font-size="13" font-weight="bold" fill="#0f1117">SECURITY</text>
+  <text x="35" y="539" font-size="11" fill="#e6e6e6">IAM     — Users, roles, policies. Least privilege principle.</text>
+  <text x="35" y="557" font-size="11" fill="#e6e6e6">IAM Role — Attach to ECS task/Lambda to access other services</text>
+  <text x="35" y="575" font-size="11" fill="#e6e6e6">Secrets Manager — Store DB passwords, API keys (auto-rotate)</text>
+  <text x="35" y="593" font-size="11" fill="#e6e6e6">KMS     — Encryption key management for S3, RDS, EBS</text>
+  <text x="35" y="611" font-size="11" fill="#e6e6e6">WAF     — Web Application Firewall, blocks SQLi/XSS at edge</text>
+  <text x="35" y="629" font-size="11" fill="#e6e6e6">Shield  — DDoS protection (Standard free, Advanced paid)</text>
+  <text x="35" y="653" font-size="11" fill="#fbbf24">Never hardcode credentials — always use IAM Role or Secrets Mgr</text>
+  <text x="35" y="671" font-size="11" fill="#fbbf24">Security Group = stateful firewall at instance level</text>
+  <text x="35" y="689" font-size="11" fill="#f87171">NACL = stateless firewall at subnet level (both in/out rules)</text>
+
+  <!-- ── COLUMN 2 ── -->
+
+  <!-- Database -->
+  <rect x="415" y="72" width="370" height="215" rx="8" fill="#1a1d23" stroke="#a78bfa" stroke-width="1.5"/>
+  <rect x="415" y="72" width="370" height="32" rx="8" fill="#a78bfa"/>
+  <text x="600" y="93" text-anchor="middle" font-size="13" font-weight="bold" fill="#0f1117">DATABASE</text>
+  <text x="430" y="120" font-size="11" fill="#e6e6e6">RDS        — Managed SQL (MySQL, PostgreSQL, Oracle, MSSQL)</text>
+  <text x="430" y="138" font-size="11" fill="#e6e6e6">Aurora     — AWS-optimized SQL, 5× faster, Multi-AZ default</text>
+  <text x="430" y="156" font-size="11" fill="#e6e6e6">DynamoDB   — Serverless NoSQL, key-value, single-digit ms</text>
+  <text x="430" y="174" font-size="11" fill="#e6e6e6">ElastiCache — In-memory cache: Redis (rich) or Memcached (simple)</text>
+  <text x="430" y="192" font-size="11" fill="#e6e6e6">DocumentDB — Managed MongoDB-compatible document store</text>
+  <text x="430" y="210" font-size="11" fill="#e6e6e6">Redshift   — Columnar data warehouse for analytics/BI</text>
+  <text x="430" y="234" font-size="11" fill="#fbbf24">RDS Multi-AZ → sync standby for HA failover (~1-2 min RTO)</text>
+  <text x="430" y="252" font-size="11" fill="#fbbf24">Read Replica → async copy for read scaling (eventual consistency)</text>
+  <text x="430" y="270" font-size="11" fill="#f87171">DynamoDB: design access patterns first, no ad-hoc queries</text>
+
+  <!-- Networking -->
+  <rect x="415" y="299" width="370" height="215" rx="8" fill="#1a1d23" stroke="#38bdf8" stroke-width="1.5"/>
+  <rect x="415" y="299" width="370" height="32" rx="8" fill="#38bdf8"/>
+  <text x="600" y="320" text-anchor="middle" font-size="13" font-weight="bold" fill="#0f1117">NETWORKING</text>
+  <text x="430" y="347" font-size="11" fill="#e6e6e6">VPC        — Isolated virtual network. Subnets, route tables, IGW.</text>
+  <text x="430" y="365" font-size="11" fill="#e6e6e6">ALB        — Layer 7 LB: path/host routing, TLS termination</text>
+  <text x="430" y="383" font-size="11" fill="#e6e6e6">NLB        — Layer 4 LB: ultra-low latency, TCP/UDP, static IP</text>
+  <text x="430" y="401" font-size="11" fill="#e6e6e6">VPC Peering — Private IP routing between two VPCs</text>
+  <text x="430" y="419" font-size="11" fill="#e6e6e6">PrivateLink  — Expose service to another VPC without peering</text>
+  <text x="430" y="437" font-size="11" fill="#e6e6e6">CloudFront  — CDN with edge caching + WAF integration</text>
+  <text x="430" y="455" font-size="11" fill="#e6e6e6">Route 53   — DNS, health checks, failover routing policies</text>
+  <text x="430" y="479" font-size="11" fill="#fbbf24">VPC Peering pitfall: route tables must be updated on BOTH sides</text>
+  <text x="430" y="497" font-size="11" fill="#f87171">Public subnet: has route to IGW · Private: routes through NAT GW</text>
+
+  <!-- Messaging & Events -->
+  <rect x="415" y="526" width="370" height="160" rx="8" fill="#1a1d23" stroke="#fb923c" stroke-width="1.5"/>
+  <rect x="415" y="526" width="370" height="32" rx="8" fill="#fb923c"/>
+  <text x="600" y="547" text-anchor="middle" font-size="13" font-weight="bold" fill="#0f1117">MESSAGING &amp; EVENTS</text>
+  <text x="430" y="574" font-size="11" fill="#e6e6e6">SQS Standard — At-least-once delivery, best-effort ordering</text>
+  <text x="430" y="592" font-size="11" fill="#e6e6e6">SQS FIFO    — Exactly-once, strict order per MessageGroupId</text>
+  <text x="430" y="610" font-size="11" fill="#e6e6e6">SNS         — Pub/Sub fan-out to SQS, Lambda, HTTP, email</text>
+  <text x="430" y="628" font-size="11" fill="#e6e6e6">EventBridge — Event bus, rule-based routing, SaaS integrations</text>
+  <text x="430" y="646" font-size="11" fill="#e6e6e6">Kinesis     — Real-time streaming data (logs, clickstream)</text>
+  <text x="430" y="670" font-size="11" fill="#fbbf24">FIFO: 300 msg/s (3000 with batching) · Standard: unlimited</text>
+  <text x="430" y="688" font-size="11" fill="#f87171">DLQ → messages that fail N retries; never block the main queue</text>
+
+  <!-- ── COLUMN 3 ── -->
+
+  <!-- High Availability -->
+  <rect x="810" y="72" width="370" height="180" rx="8" fill="#1a1d23" stroke="#34d399" stroke-width="1.5"/>
+  <rect x="810" y="72" width="370" height="32" rx="8" fill="#34d399"/>
+  <text x="995" y="93" text-anchor="middle" font-size="13" font-weight="bold" fill="#0f1117">HIGH AVAILABILITY</text>
+  <text x="825" y="120" font-size="11" fill="#e6e6e6">Multi-AZ       — Spread ECS tasks, RDS, ElastiCache across AZs</text>
+  <text x="825" y="138" font-size="11" fill="#e6e6e6">ALB health check — Remove unhealthy targets automatically</text>
+  <text x="825" y="156" font-size="11" fill="#e6e6e6">Auto Scaling   — ECS service scale on CPU/memory/queue depth</text>
+  <text x="825" y="174" font-size="11" fill="#e6e6e6">RDS Multi-AZ   — Sync standby, auto failover (1–2 min RTO)</text>
+  <text x="825" y="192" font-size="11" fill="#e6e6e6">S3             — 11 nines durability, cross-region replication</text>
+  <text x="825" y="210" font-size="11" fill="#e6e6e6">Circuit Breaker — Prevent cascading failures to downstream</text>
+  <text x="825" y="234" font-size="11" fill="#fbbf24">RTO = how fast you recover · RPO = how much data you can lose</text>
+
+  <!-- Cost Optimization -->
+  <rect x="810" y="264" width="370" height="175" rx="8" fill="#1a1d23" stroke="#fbbf24" stroke-width="1.5"/>
+  <rect x="810" y="264" width="370" height="32" rx="8" fill="#fbbf24"/>
+  <text x="995" y="285" text-anchor="middle" font-size="13" font-weight="bold" fill="#0f1117">COST OPTIMIZATION</text>
+  <text x="825" y="312" font-size="11" fill="#e6e6e6">Fargate Spot      — Up to 70% off for fault-tolerant batch</text>
+  <text x="825" y="330" font-size="11" fill="#e6e6e6">Reserved Instances — 1–3 yr commit → up to 72% saving</text>
+  <text x="825" y="348" font-size="11" fill="#e6e6e6">Savings Plans     — Flexible RI alternative (compute/Lambda)</text>
+  <text x="825" y="366" font-size="11" fill="#e6e6e6">S3 Lifecycle      — Auto-move to IA/Glacier by age</text>
+  <text x="825" y="384" font-size="11" fill="#e6e6e6">Right-sizing      — Container Insights → tune CPU/memory</text>
+  <text x="825" y="402" font-size="11" fill="#e6e6e6">Redis caching     — Reduce expensive downstream API calls</text>
+  <text x="825" y="420" font-size="11" fill="#fbbf24">Cost Explorer + Budgets → alerts before overspend</text>
+
+  <!-- Observability -->
+  <rect x="810" y="451" width="370" height="175" rx="8" fill="#1a1d23" stroke="#a78bfa" stroke-width="1.5"/>
+  <rect x="810" y="451" width="370" height="32" rx="8" fill="#a78bfa"/>
+  <text x="995" y="472" text-anchor="middle" font-size="13" font-weight="bold" fill="#0f1117">OBSERVABILITY</text>
+  <text x="825" y="499" font-size="11" fill="#e6e6e6">CloudWatch Logs    — Centralized log aggregation from all services</text>
+  <text x="825" y="517" font-size="11" fill="#e6e6e6">CloudWatch Metrics — CPU, memory, queue depth, custom metrics</text>
+  <text x="825" y="535" font-size="11" fill="#e6e6e6">CloudWatch Alarms  — Trigger SNS / Auto Scaling on threshold</text>
+  <text x="825" y="553" font-size="11" fill="#e6e6e6">X-Ray             — Distributed tracing across services</text>
+  <text x="825" y="571" font-size="11" fill="#e6e6e6">Container Insights — ECS/EKS metrics: task CPU, memory, network</text>
+  <text x="825" y="589" font-size="11" fill="#e6e6e6">CloudTrail        — Audit log of all API calls (who did what)</text>
+  <text x="825" y="607" font-size="11" fill="#fbbf24">Log → Metric filter → Alarm → SNS → PagerDuty</text>
+
+  <!-- ── BOTTOM BANNER ── -->
+  <rect x="20" y="700" width="1160" height="260" rx="8" fill="#1a1d23" stroke="#FF9900" stroke-width="1.5"/>
+  <rect x="20" y="700" width="1160" height="32" rx="8" fill="#FF9900"/>
+  <text x="600" y="721" text-anchor="middle" font-size="13" font-weight="bold" fill="#0f1117">INTERVIEW QUICK REFERENCE</text>
+
+  <!-- Col A -->
+  <text x="40" y="752" font-size="12" font-weight="bold" fill="#FF9900">ECS Task Definition</text>
+  <text x="40" y="770" font-size="11" fill="#e6e6e6">Container image + CPU + memory + env vars + IAM role</text>
+  <text x="40" y="788" font-size="11" fill="#e6e6e6">Task = running instance · Service = desired count + LB</text>
+  <text x="40" y="820" font-size="12" font-weight="bold" fill="#FF9900">SQS FIFO Pattern</text>
+  <text x="40" y="838" font-size="11" fill="#e6e6e6">MessageGroupId = entity ID → ordered per entity</text>
+  <text x="40" y="856" font-size="11" fill="#e6e6e6">DeduplicationId → prevent duplicate processing</text>
+  <text x="40" y="874" font-size="11" fill="#e6e6e6">VisibilityTimeout → hide msg while processing (set &gt; max job time)</text>
+  <text x="40" y="910" font-size="12" font-weight="bold" fill="#fbbf24">My Approach</text>
+  <text x="40" y="928" font-size="11" fill="#e6e6e6">SQL (RDS) for transactional data · Redis for caching</text>
+  <text x="40" y="946" font-size="11" fill="#e6e6e6">DynamoDB only for high-scale, simple-access-pattern workloads</text>
+
+  <!-- Col B -->
+  <text x="440" y="752" font-size="12" font-weight="bold" fill="#34d399">VPC Architecture</text>
+  <text x="440" y="770" font-size="11" fill="#e6e6e6">Public subnet  → ALB, NAT Gateway, Bastion</text>
+  <text x="440" y="788" font-size="11" fill="#e6e6e6">Private subnet → ECS tasks, RDS, ElastiCache</text>
+  <text x="440" y="806" font-size="11" fill="#e6e6e6">Internet GW → public traffic · NAT GW → outbound-only from private</text>
+  <text x="440" y="838" font-size="12" font-weight="bold" fill="#34d399">Common Design Decisions</text>
+  <text x="440" y="856" font-size="11" fill="#e6e6e6">Export pipeline: SQS FIFO → ECS Fargate → S3 upload → SNS notify</text>
+  <text x="440" y="874" font-size="11" fill="#e6e6e6">API throttle: ALB → Lambda → ElastiCache rate-limit check</text>
+  <text x="440" y="892" font-size="11" fill="#e6e6e6">Async job: API → SQS → Worker ECS task → DB update → S3</text>
+  <text x="440" y="928" font-size="12" font-weight="bold" fill="#fbbf24">Scaling Strategy</text>
+  <text x="440" y="946" font-size="11" fill="#e6e6e6">Scale on queue depth (SQS ApproximateNumberOfMessages)</text>
+
+  <!-- Col C -->
+  <text x="840" y="752" font-size="12" font-weight="bold" fill="#a78bfa">Key Limits to Know</text>
+  <text x="840" y="770" font-size="11" fill="#e6e6e6">Lambda       — 15 min timeout, 10 GB RAM, 512 MB /tmp</text>
+  <text x="840" y="788" font-size="11" fill="#e6e6e6">SQS msg size — 256 KB max (S3 pointer for larger payloads)</text>
+  <text x="840" y="806" font-size="11" fill="#e6e6e6">SQS FIFO     — 300 TPS (3000 with batching)</text>
+  <text x="840" y="824" font-size="11" fill="#e6e6e6">S3 object    — 5 TB max, multipart upload for &gt;100 MB</text>
+  <text x="840" y="842" font-size="11" fill="#e6e6e6">ECS Fargate  — 16 vCPU / 120 GB max per task</text>
+  <text x="840" y="874" font-size="12" font-weight="bold" fill="#a78bfa">Common Interview Traps</text>
+  <text x="840" y="892" font-size="11" fill="#f87171">S3 is not a file system — use EFS for shared file access</text>
+  <text x="840" y="910" font-size="11" fill="#f87171">RDS Read Replica ≠ Multi-AZ failover (different purposes)</text>
+  <text x="840" y="928" font-size="11" fill="#f87171">Security Group is stateful; NACL is stateless — know the diff</text>
+  <text x="840" y="946" font-size="11" fill="#f87171">VPC Peering: NOT transitive — A↔B + B↔C ≠ A↔C</text>
+
+</svg>
