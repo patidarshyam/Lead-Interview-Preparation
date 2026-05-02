@@ -153,11 +153,38 @@ Select-String -Path $file -Pattern "^\[From:" | Select-Object -First 50
 
 ## Git
 
-The repo is initialized but has **no commits yet**. All files are untracked.
+Repo is committed and pushed to GitHub (`main` branch). Remote is disconnected after each session for security.
 
-To do an initial commit:
+**For regular commits:**
 ```powershell
-cd "C:\Users\YTKCKA9\OneDrive - Deere & Co\Desktop\sp\Technical"
+cd "c:\SP\Technical"
 git add .
-git commit -m "Initial commit: 139 Q&A across 22 files"
+git commit -m "your message"
+git push
+```
+
+---
+
+## GitHub Reconnect [TEMP — remove after use]
+
+**Remote repo:** `https://github.com/patidarshyam/Lead-Interview-Preparation.git`
+**GitHub username:** `patidarshyam`
+**Auth:** Personal Access Token (PAT) — generate at GitHub → Settings → Developer settings → Personal access tokens → Tokens (classic) → scope: `repo`
+
+**Steps to reconnect:**
+```powershell
+cd "c:\SP\Technical"
+git remote add origin https://github.com/patidarshyam/Lead-Interview-Preparation.git
+git push   # paste PAT when prompted for password
+```
+
+**Steps to disconnect after push:**
+```powershell
+# 1. Remove remote
+git remote remove origin
+
+# 2. Clear stored credential for patidarshyam only
+cmdkey /delete:LegacyGeneric:target=git:https://patidarshyam@github.com
+# If above doesn't match, also try:
+cmdkey /delete:LegacyGeneric:target=git:https://github.com
 ```
