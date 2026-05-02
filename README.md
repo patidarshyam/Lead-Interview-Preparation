@@ -109,7 +109,6 @@ Work through these steps in order. Each step = one file. Practice answers out lo
 
 ## Conventions
 
-- **No company-specific or proprietary information** — use "the product", "the team", "the org", "the platform"
 - **Behavioral answers** use STAR format
 - **Technical answers** use Definition → Mechanism → Benefits/Trade-offs
 - Add new Q&A as you practice — keep iterating
