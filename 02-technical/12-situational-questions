@@ -1,0 +1,424 @@
+1) Your API is slow under load — Ready-to-Speak
+
+“If my API is slow under load, I start by validating where the latency is coming from using metrics like P95/P99 latency, throughput, and error rate.
+
+Then I isolate the bottleneck layer—whether it’s application code, database, external services, or infrastructure—using tools like distributed tracing and APM.
+
+After that, I check resource contention, like thread pool saturation, DB connection limits, slow queries, or high GC/CPU usage.
+
+One key thing I look for is whether it’s a spike issue or a sustained load problem, because that changes the approach.
+
+So overall, I follow a top-down approach—measure, isolate, and then optimize the actual bottleneck instead of guessing.”
+
+
+Follow-ups
+
+Q: “How do you quickly identify if it’s DB or application issue?”
+A: “I check distributed traces—if most latency is in DB calls, it’s likely query or connection issue; if it’s inside service methods, it’s application logic or thread contention.”
+
+Q: “What metrics do you check first?”
+A: “P95/P99 latency, throughput, error rate, CPU, memory, GC pauses, and DB connection pool usage.”
+
+Q: “What if CPU is high?”
+A: “I look for inefficient code, excessive object creation causing GC pressure, or thread contention. Profiling helps identify hot methods.”
+
+Q: “What if DB is the bottleneck?”
+A: “I check slow queries, missing indexes, query plans, and connection pool saturation. Then optimize queries or add caching if needed.”
+
+Q: “How do you handle sudden traffic spikes?”
+A: “I use autoscaling, rate limiting, caching, and possibly queueing to smooth traffic and protect the system.”
+
+Q: “How do you reproduce the issue?”
+A: “Using load testing tools in staging with similar traffic patterns to isolate and validate the bottleneck.”
+
+
+2) A downstream service is failing — Ready-to-Speak
+
+“If a downstream service is failing, my goal is to prevent that failure from propagating and impacting the entire system.
+
+I handle this using resilience patterns. First, I use a circuit breaker to stop calls once failures cross a threshold and fail fast.
+
+Second, I apply timeouts so requests don’t hang and block threads.
+
+Third, I isolate resources using bulkheads so one failing dependency doesn’t exhaust all threads or connections.
+
+I may also add retries with backoff for transient issues and fallback responses like cached or default data.
+
+So overall, I design the system to degrade gracefully instead of failing completely.”
+
+
+Follow-ups
+
+Q: “What happens when circuit breaker opens?”
+A: “Calls are short-circuited immediately, and we either return fallback response or fail fast without hitting the downstream service.”
+
+Q: “How do you decide timeout values?”
+A: “Based on downstream service latency SLAs, usually slightly above P95 latency to avoid premature failures but still protect resources.”
+
+Q: “When should you NOT retry?”
+A: “For non-idempotent operations or when failure is persistent—retries can worsen the situation.”
+
+Q: “What is bulkhead isolation practically?”
+A: “Separate thread pools or connection pools per dependency so one failing service doesn’t consume all resources.”
+
+Q: “What kind of fallback would you use?”
+A: “Cached data, default response, or degraded functionality depending on business criticality.”
+
+Q: “How do you monitor this setup?”
+A: “Track circuit breaker state, failure rates, latency, retry counts, and fallback usage to detect degradation early.”
+
+
+3) Your system processes duplicate requests — Ready-to-Speak
+
+“Idempotency ensures that even if the same request is received multiple times, the system produces only one side effect and returns the same response.
+
+I usually handle it at three levels.
+First, at the API level using an idempotency key—if the key already exists, I return the stored response instead of reprocessing.
+
+Second, at the database level using unique constraints like transaction ID to prevent duplicates across instances.
+
+Third, I ensure atomicity—so two concurrent requests don’t pass the check together, using transactions or something like Redis SETNX.
+
+One important edge case is partial failure—like payment succeeded but response failed—so retries should return the original success instead of creating a duplicate.
+
+So overall, I combine API-level deduplication with strong persistence guarantees to make the system safe under retries.”
+
+
+Follow-ups
+
+Q: “What if two requests come at the same time?”
+A: “That’s where atomicity matters—DB unique constraints or Redis SETNX ensures only one succeeds.”
+
+Q: “Is idempotency key enough?”
+A: “No, I treat DB constraints as final protection, especially in distributed systems.”
+
+Q: “What if payload differs for same key?”
+A: “Reject the request to prevent misuse or inconsistency.”
+
+Q: “How long do you store idempotency keys?”
+A: “Usually with TTL like 24–48 hours based on business need.”
+
+Q: “Why store response also?”
+A: “To return consistent response for retries without reprocessing.”
+
+Q: “Where do you store idempotency data?”
+A: “DB or distributed cache like Redis depending on scale and latency needs.”
+
+
+4) Service works locally but fails in production — Ready-to-Speak
+
+“If a service works locally but fails in production, I first assume an environment mismatch rather than a code issue.
+
+I start by comparing configurations—environment variables, secrets, and especially feature flags, because a feature enabled in production but not locally can change behavior.
+
+Then I check dependencies and infrastructure like database connectivity, network access, DNS, and third-party integrations.
+
+Next, I verify runtime differences such as container setup, JVM/runtime versions, resource limits, and permissions.
+
+One important edge case is production data—real data can expose nulls, scale issues, or constraint violations that don’t appear locally.
+
+So overall, I systematically compare config, feature toggles, dependencies, and runtime instead of assuming it’s just a code bug.”
+
+
+Follow-ups
+
+Q: “What is the first thing you check?”
+A: “Logs in production—application logs, error traces, and request context to quickly identify failure point.”
+
+Q: “How do you compare local vs production effectively?”
+A: “I use config diffing—environment variables, configs, versions, and endpoints—often automated via config management tools.”
+
+Q: “What if it works in staging but not production?”
+A: “Then I focus on production-specific factors like traffic volume, real data, scaling issues, or stricter security rules.”
+
+Q: “How do you debug if you can’t access production directly?”
+A: “Use logs, metrics, distributed tracing, and replicate issue in staging with similar configs.”
+
+Q: “What kind of data issues can break production?”
+A: “Null values, unexpected formats, large payloads, or constraint violations not present in local test data.”
+
+Q: “How can feature flags cause production-only failures?”
+A: “If a feature is enabled only in production, it may execute code paths that were never tested locally or in staging, leading to unexpected failures.”
+
+5) Thread pool gets exhausted — Ready-to-Speak
+
+“If a thread pool gets exhausted, it usually means tasks are blocking or arriving faster than they’re processed, leading to queuing and high latency.
+
+I first identify why threads are busy—commonly blocking I/O like slow DB or external calls, or missing timeouts.
+
+Then I reduce blocking using timeouts, optimize slow dependencies, and use async or non-blocking approaches where possible. I also tune thread pool size and isolate workloads using bulkheads instead of just increasing threads.
+
+If the workload is I/O-heavy, I may use virtual threads, since they allow handling a large number of concurrent blocking operations without exhausting platform threads.
+
+One key edge case is retries—aggressive retries can quickly consume all threads and worsen the problem.
+
+So overall, I focus on removing blocking and controlling concurrency, and use virtual threads when it fits the workload.”
+
+
+Follow-ups
+
+Q: “How do you detect thread pool exhaustion?”
+A: “High request latency, queued tasks increasing, thread pool at max size, and timeouts or rejected executions.”
+
+Q: “Why not just increase thread pool size?”
+A: “It can worsen CPU contention and memory usage; if root cause is blocking, more threads just delay failure.”
+
+Q: “What tools do you use to debug?”
+A: “Thread dumps to see blocked threads, APM for latency, and metrics for pool utilization and queue size.”
+
+Q: “How do timeouts help?”
+A: “They prevent threads from waiting indefinitely on slow dependencies, freeing them for other requests.”
+
+Q: “What is bulkhead isolation here?”
+A: “Separate thread pools per dependency so one slow service doesn’t consume all threads.”
+
+Q: “When would you use async processing?”
+A: “For I/O-heavy tasks or non-critical flows where we can free request threads and process in background.”
+
+Q: “When would you use virtual threads?”
+A: “For I/O-bound workloads like DB or HTTP calls, where threads spend time waiting—virtual threads scale better with lower overhead.”
+
+Q: “When NOT to use virtual threads?”
+A: “For CPU-bound tasks, since they don’t reduce CPU contention and may add scheduling overhead.”
+
+Q: “Do virtual threads solve thread pool exhaustion completely?”
+A: “No—they reduce thread management overhead, but you still need timeouts, backpressure, and dependency optimization.”
+
+
+6) Logs are not enough — Ready-to-Speak
+
+“If logs aren’t enough, it means observability is incomplete.
+
+I improve it by adding structured logging with correlation IDs so requests can be traced end-to-end.
+
+Then I add distributed tracing to see request flow across services and identify latency breakdown.
+
+I also expose metrics—latency, error rate, resource usage—and use APM for method-level insights.
+
+One edge case is log noise—too many logs without structure make debugging harder.
+
+So overall, I combine logs, traces, and metrics to get full visibility.”
+
+
+Follow-ups
+
+Q: “What is correlation ID?”
+A: “A unique request ID propagated across services for traceability.”
+
+Q: “Logs vs tracing?”
+A: “Logs show events; tracing shows request flow and timing.”
+
+
+7) Deployment breaks communication — Versioning — Ready-to-Speak
+
+“If deployment breaks communication, it’s usually a contract mismatch between service versions.
+
+I handle this using backward-compatible APIs—additive changes, avoid breaking fields.
+
+I also use versioning strategies like URI/version headers and maintain multiple versions during transition.
+
+Then I apply consumer-driven contract testing to ensure compatibility before release.
+
+One edge case is partial rollout—old and new versions co-exist and must interoperate.
+
+So overall, I ensure backward compatibility and safe rollout.”
+
+
+Follow-ups
+
+Q: “How do you deploy safely?”
+A: “Canary or blue-green deployment.”
+
+Q: “Breaking change example?”
+A: “Removing/renaming fields without versioning.”
+
+
+8) DB connections exhausted — Ready-to-Speak
+
+“DB connection exhaustion means connections are not being released or demand exceeds pool capacity.
+
+I first check for connection leaks—unclosed connections or missing finally blocks.
+
+Then I analyze pool usage, long-running queries, and slow transactions holding connections.
+
+I optimize queries, add indexes, and tune pool size appropriately.
+
+One edge case is traffic spikes combined with slow queries causing saturation.
+
+So overall, I fix leaks, optimize queries, and tune the pool.”
+
+
+Follow-ups
+
+Q: “How detect leak?”
+A: “Connections active but not returning; pool metrics show exhaustion.”
+
+Q: “Fix?”
+A: “Ensure proper closing or use managed frameworks.”
+
+
+9) Inconsistent data due to concurrency — Ready-to-Speak
+
+“Inconsistent data due to concurrent updates is a race condition problem.
+
+I handle it using concurrency control—optimistic locking with version fields or pessimistic locking where needed.
+
+I also use transactions with proper isolation levels to maintain consistency.
+
+For distributed systems, I may use idempotency or event ordering strategies.
+
+One edge case is lost updates when multiple writes overwrite each other.
+
+So overall, I enforce consistency using locking and transactional guarantees.”
+
+
+Follow-ups
+
+Q: “Optimistic vs pessimistic?”
+A: “Optimistic for low contention; pessimistic for high contention.”
+
+
+10) App crashes over time — Memory issues — Ready-to-Speak
+
+“If an app crashes over time, I suspect memory leaks or GC pressure.
+
+I monitor heap usage, GC logs, and memory growth patterns.
+
+Then I analyze heap dumps to find retained objects or leaks.
+
+I also check for excessive object creation or caching issues.
+
+One edge case is unbounded caches causing gradual memory exhaustion.
+
+So overall, I use monitoring and heap analysis to identify and fix leaks.”
+
+
+Follow-ups
+
+Q: “Tool?”
+A: “Heap dump analyzers like MAT or VisualVM.”
+
+
+11) Scheduled job runs multiple times — Ready-to-Speak
+
+“If a scheduled job runs multiple times across instances, it’s due to lack of coordination.
+
+I solve it using distributed locking—like DB locks or Redis-based locks—so only one instance executes.
+
+Alternatively, I use leader election or centralized schedulers.
+
+One edge case is lock expiry—must ensure safe release.
+
+So overall, I enforce single execution using distributed coordination.”
+
+
+Follow-ups
+
+Q: “Tool example?”
+A: “ShedLock, Quartz clustering, Redis locks.”
+
+
+12) API high latency during peak — Ready-to-Speak
+
+“High latency during peak hours usually indicates resource contention or scaling limits.
+
+I identify bottlenecks using metrics and tracing.
+
+Then I optimize using caching, DB query tuning, and reducing synchronous calls.
+
+I also scale horizontally and apply rate limiting.
+
+One edge case is hotspot endpoints causing uneven load.
+
+So overall, I optimize bottlenecks and scale efficiently.”
+
+
+Follow-ups
+
+Q: “First fix?”
+A: “Caching or DB optimization.”
+
+Q: “How do you differentiate CPU vs IO bottleneck?”
+A: “CPU high → compute issue; low CPU + high latency → likely I/O wait.”
+
+Q: “What if caching is already in place?”
+A: “Check cache hit ratio and eviction; optimize cache strategy or data model.”
+
+Q: “How do you handle uneven traffic distribution?”
+A: “Load balancing + request routing + shard hotspots.”
+
+Q: “Vertical vs horizontal scaling?”
+A: “Prefer horizontal for scalability and resilience.”
+
+
+13) Inter-service communication intermittent — Ready-to-Speak
+
+“Intermittent failures usually mean network instability or transient errors.
+
+I handle it with retries using exponential backoff.
+
+I also use circuit breakers to prevent cascading failures.
+
+Timeouts ensure threads don’t block indefinitely.
+
+One edge case is retry storms increasing load.
+
+So overall, I combine retries, timeouts, and circuit breakers.”
+
+
+Follow-ups
+
+Q: “Retry always?”
+A: “Only for idempotent operations.”
+
+
+14) Retry creates more load — Ready-to-Speak
+
+“If retries increase load, it means retry strategy is too aggressive.
+
+I fix it using exponential backoff and jitter to spread retries.
+
+I also limit retry count and combine with circuit breaker to stop retries during failure.
+
+One edge case is retry storms under outage.
+
+So overall, retries must be controlled and adaptive.”
+
+
+Follow-ups
+
+Q: “Why jitter?”
+A: “Prevents synchronized retry spikes.”
+
+
+15) System unstable during traffic spike — Ready-to-Speak
+
+“During traffic spikes, instability usually comes from resource exhaustion.
+
+I stabilize by applying rate limiting and load shedding to protect the system.
+
+I also use autoscaling and caching to handle increased load.
+
+Queueing helps smooth sudden spikes.
+
+One edge case is sudden burst overwhelming downstream systems.
+
+So overall, I protect, absorb, and scale the system.”
+
+
+Follow-ups
+
+Q: “First action?”
+A: “Rate limiting or load shedding to stop overload.”
+
+Q: “What is load shedding?”
+A: “Dropping non-critical requests to keep system healthy.”
+
+Q: “How do you prioritize traffic?”
+A: “Critical vs non-critical APIs with different limits.”
+
+Q: “What if downstream systems fail during spike?”
+A: “Use circuit breakers and fallback to prevent cascade.”
+
+Q: “How do you test this scenario?”
+A: “Load testing with spike patterns (burst traffic simulation).”
