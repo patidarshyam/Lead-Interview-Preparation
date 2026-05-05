@@ -1716,3 +1716,93 @@ dashboard.thenAccept(data -> response.complete(data));
 
 ---
 
+
+
+#Stream API Questions:
+
+1. Group employees by department
+
+employees.stream().collect(Collectors.groupingBy(Employee::getDepartm ent));
+
+2. Count frequency of elements
+
+list.stream()
+.collect(Collectors.grouping By(Function.identity(), Collectors.counting()));
+
+3. Convert List Map (handle duplicates)
+
+list.stream()
+.collect(Collectors.toMap( )); User::getld, User::getName, (a, b) -> a
+
+4. Find duplicate elements
+
+list.stream()
+.filter(e -> Collections.frequency(list, e) > 1) .collect(Collectors.toSet());
+
+5. Sort objects by field
+
+list.stream() .sorted(Comparator.comparing (Employee::getSalary)) .toList();
+
+6. Top N highest salary
+
+list.stream()
+.sorted (Comparator.comparing (Employee::getSalary).reversed())
+.limit(3)
+.toList();
+
+7. Flatten nested lists
+
+listOfLists.stream()
+flatMap(List::stream)
+.toList();
+
+8. Partition even/odd
+
+list.stream()
+.collect(Collectors.partitioningBy(n -> n % 2 == 0));
+
+9. Find max element
+
+list.stream()
+.max(Comparator.comparing (Employee::getSalary));
+
+10. Transform list (map)
+
+list.stream()
+.map(Employee::getName)
+.toList();
+
+11. Remove duplicates
+
+list.stream()
+.distinct()
+.toList();
+
+
+12.Group and count
+
+list.stream()
+.collect(Collectors.groupingBy( Function.identity(), )); Collectors.counting()
+
+13 Join strings
+
+list.stream()
+.collect(Collectors.joining(", "));
+
+14. Filter + sort + map (combined pattern)
+
+list.stream()
+.filter(e -> e.getSalary() > 50000)
+.sorted(Comparator.comparing (Employee::getSalary))
+.map(Employee::getName)
+.toList();
+
+15. Find second highest salary
+
+list.stream()
+.map(Employee::getSalary)
+.distinct()
+.sorted (Comparator.reverseOrder())
+.skip(1)
+.findFirst();
+
