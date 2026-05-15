@@ -157,4 +157,38 @@ Use STAR:
 
 ---
 
+## Program: find pallendroms from list of strings :
+
+```
+import java.util.*;
+import java.util.stream.*;
+
+class Main {
+    public static void main(String[] args) {
+        System.out.println("Start ...");
+        List<String> list = List.of("aba", "abcd", "bananab", "AMMA", "121","12","1","122");
+
+        List<String> pallindromList= list.stream().filter(str ->isPallendrome(str)).collect(Collectors.toList());
+     
+        System.out.println(pallindromList);
+    }
+    
+    static boolean isPallendrome(String str){
+        int left = 0;
+        int right = str.length()-1;
+        while(left<right){
+            if(str.charAt(left) != str.charAt(right)){
+                return false;
+            }
+            left++;
+            right--;
+        }
+       return true;
+    }
+ 
+}
+```
+
+---
+
 *Add specific EPAM questions as you encounter them in interviews.*
