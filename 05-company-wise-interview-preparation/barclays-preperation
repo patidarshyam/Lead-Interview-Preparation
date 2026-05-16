@@ -1,0 +1,151 @@
+Q1:To find the top 3 highest transactions per customer, how should you configure the OVER clause?
+
+Options:
+1 - OVER (ORDER BY trans_amt DESC)
+2 - OVER (PARTITION BY customer_id ORDER BY trans_amt DESC)
+3 - OVER (GROUP BY customer_id)
+4 - OVER (PARTITION BY trans_amt)
+
+Correct Answer: 2 - OVER (PARTITION BY customer_id ORDER BY trans_amt DESC)
+--------------
+Q2:In a Choreography-based Saga, how do services communicate a failure?
+
+Options:
+1 - A central coordinator sends a global rollback command.
+2 - Each service emits a compensating transaction to undo their local changes.
+3 - The database uses Two-Phase Commit (2PC) to enforce rollback.
+4 - The API Gateway kills the connection and retries all requests.
+
+Correct Answer: 2 - Each service emits a compensating transaction to undo their local changes.
+---------------
+Q3:
+What principle is violated in this Spring Boot controller?
+
+Code:
+@GetMapping("/user/{id}")
+public ResponseEntity<User> getUser(@PathVariable Long id) {
+    User user = userService.findById(id);
+
+    if (user == null)
+        return ResponseEntity.notFound().build();
+
+    return ResponseEntity.ok(user);
+}
+
+@GetMapping("/admin/{id}")
+public ResponseEntity<User> getAdmin(@PathVariable Long id) {
+    User user = userService.findById(id);
+
+    if (user == null)
+        return ResponseEntity.notFound().build();
+
+    return ResponseEntity.ok(user);
+}
+Options:
+1 - SRP (Single Responsibility Principle)
+2 - DRY (Don't Repeat Yourself)
+3 - KISS (Keep It Simple, Stupid)
+4 - OCP (Open/Closed Principle)
+Answer: 2 - DRY (Don't Repeat Yourself)
+--------------
+Q4:
+To find the top 3 highest transactions per customer, how should you configure the OVER clause?
+Options:
+A) OVER (ORDER BY trans_amt DESC)
+B) OVER (PARTITION BY customer_id ORDER BY trans_amt DESC)
+C) OVER (GROUP BY customer_id)
+D) OVER (PARTITION BY trans_amt)
+
+Answer: B
+Reason:To get top transactions per customer, windowing must restart for each customer using PARTITION BY customer_id and then sort transactions descending.
+---------------
+Q5:
+In Java 17+, which statement is true about Sealed Classes?
+Options:
+A) They prevent any class from being instantiated
+B) They allow any class to use their methods without inheritance
+C) They allow a class to restrict which classes can extend or implement it
+D) They are used primarily to speed up reflection
+
+Answer: C
+C)They allow a class to restrict which classes can extend or implement it
+Reason:Sealed classes in Java 17 control inheritance by explicitly specifying permitted subclasses using the permits keyword.
+----------------
+
+Q6:
+Map<String, Integer> map = new HashMap<>();
+
+map.put("Aa", 1);
+map.put("BB", 2);
+
+System.out.println(map.get("Aa"));
+
+What is true?
+
+Options:
+A) Only one value stored
+B) Map size becomes 1
+C) Runtime exception
+D) Hash collision occurs but both entries exist
+
+Answer: D
+D) Hash collision occurs but both entries exist
+Reason:
+"Aa" and "BB" produce the same hashCode in Java, causing a hash collision, but HashMap still stores both entries correctly using buckets/chaining.
+--------
+Q7:
+Which method is used to create a Config Server in Spring Cloud Config?
+
+Options:
+A) @EnableConfig
+B) @EnableConfigServer
+C) @EnableDiscoveryClient
+D) @ConfigurationServer
+
+Answer: B
+B) @EnableConfigServer
+Reason:
+Spring Cloud Config Server is enabled using the @EnableConfigServer annotation.
+-------------
+
+Q8:What is the "Zombie Child" problem in React-Redux or similar state libraries?
+Options:
+A) A memory leak caused by components not being unmounted properly
+B) A component that continues using stale props or state because subscriptions were not cleaned up correctly
+C) A component that renders twice in development mode
+D) A Redux thunk that never resolves asynchronously
+
+Answer: B
+B) A component that continues using stale props or state because subscriptions were not cleaned up correctly
+Reason:
+The "Zombie Child" problem happens when a component continues receiving outdated store updates due to stale subscriptions or improper cleanup/order of updates.
+------------
+Q9:What is the risk of using REFRESH ON COMMIT for a Materialized View on a high-transaction table?
+
+Options:
+A) Data is not kept synced
+B) It significantly slows commits due to refresh overhead
+C) Requires additional indexes
+D) Prevents inserts on the base table
+
+Answer: B
+B) It significantly slows commits due to refresh overhead
+Reason:
+REFRESH ON COMMIT updates the materialized view during every transaction commit, which can heavily impact commit performance on high-write tables.
+--------------
+
+Q10:
+When using Spring Cloud Config, what is the primary benefit of using a "Bus Refresh" over an /actuator/refresh?
+
+Options:
+A) It encrypts configuration values
+B) It refreshes configuration across all connected services automatically
+C) It stores refreshed configs in memory cache
+D) It forces the JVM to reload application classes
+
+Answer: B
+B) It refreshes configuration across all connected services automatically
+Reason:
+Spring Cloud Bus propagates refresh events to all connected microservices, avoiding manual refresh calls on each instance.
+
+---------------
