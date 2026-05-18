@@ -204,7 +204,7 @@ class Main {
         int result = subArrayMaxSum(arr, k);
         System.out.println("Start small. Ship something.=> "+result);
     }
-    
+    // O(nk) O(1)
     public static int subArrayMaxSum(int[] arr, int k) {
         System.out.println("Start small. Ship something.");
         int n = arr.length;
@@ -218,6 +218,35 @@ class Main {
             }
         }
         
+        return maxSum;
+    }
+
+    //Sliding window solution // O(n), space o(1)
+ public static int findMaxSum(int[] arr, int k) {
+        if (arr == null || arr.length < k || k <= 0) {
+            return 0; 
+        }
+
+        int windowSum = 0;
+
+        // Loop 1: Calculate the sum of the first window
+        for (int i = 0; i < k; i++) {
+            windowSum = windowSum + arr[i];
+        }
+
+        int maxSum = windowSum;
+        int start = 0;
+        // Loop 2: Slide the window across the array
+        for (int end = k; end < arr.length; end++) {
+            // Simplified expansion of the sliding window math
+            windowSum = windowSum + arr[end] - arr[start];
+            start ++;
+            
+            
+        maxSum = Math.max(windowSum, maxSum);
+            
+        }
+
         return maxSum;
     }
 }
