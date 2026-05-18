@@ -190,5 +190,38 @@ class Main {
 ```
 
 ---
+Program : max sum of sub array for 'k' th values in java
+```
+// Online Java Compiler
+// Use this editor to write, compile and run your Java code online
+import java.lang.*;
+import java.util.*;
+
+class Main {
+    public static void main(String[] args) {
+        int[] arr = {1,3,6,4,8,2};
+        int k = 4;
+        int result = subArrayMaxSum(arr, k);
+        System.out.println("Start small. Ship something.=> "+result);
+    }
+    
+    public static int subArrayMaxSum(int[] arr, int k) {
+        System.out.println("Start small. Ship something.");
+        int n = arr.length;
+        int maxSum = Integer.MIN_VALUE;
+        
+        for(int i=0; i< n; i++){
+            int tempSum = 0;
+            for (int j=i; j < Math.min(i+k, n); j++){
+                tempSum += arr[j];
+                maxSum = Math.max(maxSum, tempSum);
+            }
+        }
+        
+        return maxSum;
+    }
+}
+```
+---
 
 *Add specific EPAM questions as you encounter them in interviews.*
