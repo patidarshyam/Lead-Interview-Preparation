@@ -7,6 +7,8 @@
 > [![Cloud Native Architecture Patterns](../assets/images/cloud-native-architecture-patterns.gif)](../assets/images/cloud-native-architecture-patterns.gif)
 >
 > [![Modern System Design Components](../assets/images/modern-system-design-components.gif)](../assets/images/modern-system-design-components.gif)
+> 
+> [![Modern System Design export](../assets/images/Export-service-flow-cheetsheet-sp.png)](../assets/images/Export-service-flow-cheetsheet-sp.png)
 
 ---
 
