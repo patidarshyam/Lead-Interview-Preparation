@@ -254,3 +254,58 @@ class Main {
 ---
 
 *Add specific EPAM questions as you encounter them in interviews.*
+
+---
+Coding question: *It will take approximately 7.27 years
+for ₹100 to grow to ₹200 at 10% annual compound growth.*
+
+```
+public class CompoundGrowth {
+
+    public static void main(String[] args) {
+
+        double principal = 100;
+        double target = 200;
+        double rate = 0.10;
+
+        int years = 0;
+
+        while (principal < target) {
+            principal = principal * (1 + rate);
+            years++;
+        }
+
+        System.out.println("Years required: " + years);
+    }
+}
+
+```
+
+
+---
+Coding question:
+*2. Find longest substring without repeating character*
+
+```
+public int lengthOfLongestSubstring(String s) {
+
+    Set<Character> set = new HashSet<>();
+
+    int left = 0;
+    int maxLength = 0;
+
+    for (int right = 0; right < s.length(); right++) {
+
+        while (set.contains(s.charAt(right))) {
+            set.remove(s.charAt(left));
+            left++;
+        }
+
+        set.add(s.charAt(right));
+
+        maxLength = Math.max(maxLength, right - left + 1);
+    }
+
+    return maxLength;
+}
+```
